@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    image: rabbitmq:3-management
+  proj1:
+    image:
+      build: Raimun.ConsoleApp/Dockerfile
+      context: Raimun.ConsoleApp/
+    depends_on:
+      - rabbitmq
+  proj2:
+    image:
+      build: Raimun.Api/Dockerfile
+      context: Raimun.Api/
+    ports:
+      - "8080:5001"
+    depends_on:
+      - rabbitmq
