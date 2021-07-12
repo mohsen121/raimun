@@ -20,13 +20,11 @@ namespace Raimun.ConsoleApp.Services
     public class WeatherService : IWeatherService
     {
         private IAppDb _appDb;
-        private HttpClient _http;
         private WeatherConfig _weatherConfig;
 
         public WeatherService(IAppDb appDb, IOptionsMonitor<WeatherConfig> weatherOption)
         {
             _appDb = appDb;
-            _http = new HttpClient();
             _weatherConfig = weatherOption.CurrentValue;
         }
         public async Task HandleLocationWeatherWithGeo(double lat, double lon, DateTime dateTime)
@@ -46,9 +44,9 @@ namespace Raimun.ConsoleApp.Services
 
                 if (model?.Forecast?.Forecastday?.Any() ?? false)
                 {
-                    if (!await _appDb.Cities.AnyAsync(x => x.Name == model.Location.Name))
+                    if (model.Forecast.Forecastday[0].Day.AvgTemp > 14) 
                     {
-                        if (model.Forecast.Forecastday[0].Day.AvgTemp > 14)
+                        if (!await _appDb.Cities.AnyAsync(x => x.Name == model.Location.Name))
                         {
                             var city = new City
                             {

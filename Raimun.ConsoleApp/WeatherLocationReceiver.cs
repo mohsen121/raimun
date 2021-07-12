@@ -41,8 +41,6 @@ namespace Raimun.ConsoleApp
 
                 await _weatherService.HandleLocationWeatherWithGeo(weatherModel.Lat, weatherModel.Lon, weatherModel.Date);
 
-                Console.WriteLine("hi");
-
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
             //consumer.Shutdown += OnConsumerShutdown;
